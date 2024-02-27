@@ -13,8 +13,17 @@ library(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
 
 # Load EPIC array data
 ## Replace 'path_to_idat_files' with the directory containing your IDAT files
-setwd("path_to_idat_files")
-RGset <- readEPIC(idatPath = "path_to_idat_files")
+
+library(R.utils)
+baseDir <- "Methylation_data/GSE153347_RAW/"
+
+idat_files <- list.files(pattern = 'idat.gz', path = baseDir)
+for (i in 1:length(idat_files)) {
+  gunzip(filename = file.path(baseDir, idat_files[i]), 
+         destname = gsub("[.]gz$", "", file.path(baseDir, idat_files[i])))
+}
+
+RGset <- readEPIC(idatPath = "baseDir")
 
 # Pre-process data
 # Background correction
